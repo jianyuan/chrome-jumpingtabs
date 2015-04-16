@@ -71,12 +71,14 @@ chrome.browserAction.onClicked.addListener(function(tab) {
     });
   } else {
     // Moves tab to target window
+    var wasPinned = tab.pinned;
     chrome.tabs.move(tab.id, {
       windowId: otherWindows[0].id, // TODO: obey window selection
       index: -1
     }, function(tab) {
       chrome.tabs.update(tab.id, {
-        active: true
+        active: true,
+        pinned: wasPinned
       }, function(tab) {
         chrome.windows.update(tab.windowId, {
           drawAttention: true
@@ -91,3 +93,4 @@ chrome.browserAction.onClicked.addListener(function(tab) {
 document.addEventListener('DOMContentLoaded', function() {
   windowsDidChange();
   renderWindowsList();
+});
